@@ -1,0 +1,18 @@
+<div>
+  <% family.people.each do |adult| %>
+    <% if adult.last_name && adult.last_name.length > 0 %>
+	    <strong><%= adult.last_name %>, <%= adult.fist_name %></strong><br>
+	    <div class="left-tab">
+	      <% if adult.email %>
+	        <%= adult.email.address %><br>
+	      <% end %>
+	      <% if adult.phone %>
+	        <%= adult.phone.number %><br>
+	      <% end %>
+	    </div>
+    <% end %>
+  <% end %>
+</div>
+<div class="address">
+  <%= @family.address.line1 %><br>
+</div>

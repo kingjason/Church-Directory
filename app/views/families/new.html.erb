@@ -1,0 +1,31 @@
+New Family
+<%= form_for @family do |f| %>
+  <%= f.fields_for :people do |e| %>
+    <div>
+    Adult First and Last Name <br>
+    <%= e.text_field :fist_name, :placeholder => "First Name" %>
+    <%= e.text_field :last_name, :placeholder => "Last Name"  %>
+    <%= e.fields_for :email do |d| %>
+      <%= d.text_field :address, :placeholder => "Email Address"  %>
+    <% end %>
+    <%= e.fields_for :phone do |d| %>
+      <%= d.text_field :number, :placeholder => "Cell Phone Number"  %>
+    <% end %>
+    </div>
+  <% end %>
+  <br>
+  <%= f.fields_for :phone do |e| %>
+    <%= e.text_field :number, :placeholder => "Home Phone Number"  %><br>
+  <% end %>
+  <br>
+  Address
+  <br>
+  <%= f.fields_for :address do |e| %>
+    <%= e.text_field :line1, :placeholder => "Address Line 1"  %><br>
+    <%= e.text_field :line2, :placeholder => "Address Line 2"  %><br>
+    <%= e.text_field :city, :placeholder => "City"  %><br>
+    <%= e.text_field :state, :placeholder => "State"  %><br>
+    <%= e.text_field :zip, :placeholder => "Zip"  %><br>
+  <% end %>
+  <%= f.submit %>
+<% end %>

@@ -1,0 +1,32 @@
+<% @families.each do |family| %>
+<div>
+	<div>
+	  <% adults = family.people.where(:adult => true) %>
+	  <% children = family.people.where(:adult => nil) %>
+	  <% last_name = adults.first.last_name %>
+	  <strong><%= last_name %>,</strong>
+	  <%= adults.pluck(:fist_name).to_sentence %><br>
+	  <% if family.primary_phone_id %>
+	  Primary phone number: <%= Phone.find(family.primary_phone_id).number %><br>
+	  <% end %>
+	  <%= children.pluck(:fist_name).to_sentence %><br>
+	  <% family.people.each do |adult| %>
+	    <% if adult.last_name && adult.last_name.length > 0 %>
+		    <div class="left-tab">
+		      <% if adult.email %>
+		        <%= adult.fist_name %> email: <%= adult.email.address %><br>
+		      <% end %>
+		      <% if adult.phone %>
+		        <%= adult.fist_name %> cell phone: <%= adult.phone.number %><br>
+		      <% end %>
+		    </div>
+	    <% end %>
+	  <% end %>
+	</div>
+	<span class="address">
+	  <%= family.address.line1 %><br>
+	</span>
+</div>
+<hr>
+<% end %>
+<%= will_paginate @families %>
