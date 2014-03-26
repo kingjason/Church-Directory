@@ -52,7 +52,7 @@ class FamiliesController < ApplicationController
     if params[:query]
       @families = Family.name_seach(params[:query]).paginate(:page => params[:page])
     else
-      @families = Family.includes(:people).paginate(:page => params[:page]).order('people.last_name ASC')
+      @families = Family.includes(:people).paginate(:page => params[:page], :per_page => 10).order('people.last_name ASC')
     end
   end
 end
