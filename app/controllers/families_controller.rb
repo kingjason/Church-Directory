@@ -1,4 +1,14 @@
 class FamiliesController < ApplicationController
+  layout :layout_by_resource
+
+  def layout_by_resource
+    if params[:iframe]
+      'plain'
+     else
+      'application'
+    end
+  end
+
   def new
     @family = Family.new
     2.times { 
@@ -29,7 +39,20 @@ class FamiliesController < ApplicationController
     person = @family.people.build 
   end
 
+  def search
+    if params[:query]
+      @families = Family.name_seach(params[:query]).paginate(:page => params[:page])
+    else
+      @families = Family.includes(:people).paginate(:page => params[:page]).order('people.last_name ASC')
+    end
+    render :layout => false
+  end
+
   def index
-    @families = Family.paginate(:page => params[:page])
+    if params[:query]
+      @families = Family.name_seach(params[:query]).paginate(:page => params[:page])
+    else
+      @families = Family.includes(:people).paginate(:page => params[:page]).order('people.last_name ASC')
+    end
   end
 end

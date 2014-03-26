@@ -9,6 +9,8 @@ ChurchDirectory::Application.routes.draw do
     end
   end
   root 'welcome#index'
+  get '/families/search/:query' => 'families#search'
   get '/families/map' => 'families#map'
+  get '/families/heatmap' => 'families#heatmap'
   resources :families
 end

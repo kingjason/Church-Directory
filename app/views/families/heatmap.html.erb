@@ -1,0 +1,70 @@
+<%= javascript_include_tag "http://maps.googleapis.com/maps/api/js?sensor=false&libraries=visualization" %>
+
+
+<body onload="">
+ <div id="map-canvas" style="width: 800px; height: 480px;"></div>\
+</body>
+<% lat = Address.all.pluck(:latitude) %>
+<% lon = Address.all.pluck(:longitude) %>
+<% names = [] %>
+<% families = Address.all.pluck(:family_id) %>
+<% families.each do |family_id| %>
+      <% family = Family.find(family_id) %>
+	  <% adults = family.people.where(:adult => true) %>
+	  <% last_name = adults.first.last_name %>
+	  <% str = '<strong>' + last_name + '</strong>, ' + adults.pluck(:fist_name).to_sentence %>
+  <% names.push str %>
+<% end %>
+
+<script>
+var ready;
+ready = function() {
+	initialize();
+	}
+
+$(document).ready(ready);
+$(document).on('page:load', ready);
+
+  var geocoder;
+  var map;
+   
+function initialize() {
+  var lats = <%= raw lat.to_json %>
+  var lons = <%= raw lon.to_json %>
+  var coords = [];
+  for(var x = 0; x < lats.length; x++)
+  {
+    coords.push({location: new google.maps.LatLng(lats[x], lons[x]), weight: 50000});
+    coords.push({location: new google.maps.LatLng(lats[x], lons[x]), weight: 50000});
+    coords.push({location: new google.maps.LatLng(lats[x], lons[x]), weight: 50000});
+    coords.push({location: new google.maps.LatLng(lats[x], lons[x]), weight: 50000});
+    coords.push({location: new google.maps.LatLng(lats[x], lons[x]), weight: 50000});
+    coords.push({location: new google.maps.LatLng(lats[x], lons[x]), weight: 50000});
+    coords.push({location: new google.maps.LatLng(lats[x], lons[x]), weight: 50000});
+    coords.push({location: new google.maps.LatLng(lats[x], lons[x]), weight: 50000});
+    coords.push({location: new google.maps.LatLng(lats[x], lons[x]), weight: 50000});
+    coords.push({location: new google.maps.LatLng(lats[x], lons[x]), weight: 50000});
+  }
+
+  var mapOptions = {
+    zoom: 13,
+    center: new google.maps.LatLng(42.899373, -85.892417),
+    mapTypeId: google.maps.MapTypeId.SATELLITE
+  };
+
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  var pointArray = new google.maps.MVCArray(coords);
+
+  heatmap = new google.maps.visualization.HeatmapLayer({
+    data: pointArray
+  });
+  //heatmap.set('radius', 10);
+  heatmap.set('dissipating', true);
+
+  heatmap.setMap(map);
+}
+
+  
+</script>
